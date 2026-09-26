@@ -1,0 +1,113 @@
+:root {
+  --bg: #f5f7fa;
+  --surface: #ffffff;
+  --border: #e3e8ef;
+  --text: #1f2937;
+  --text-muted: #6b7280;
+  --brand: #0f766e;
+  --brand-soft: #ccfbf1;
+  --ok: #15803d;
+  --ok-soft: #dcfce7;
+  --warn: #b45309;
+  --warn-soft: #fef3c7;
+  --danger: #b91c1c;
+  --danger-soft: #fee2e2;
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(16, 24, 40, 0.06), 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.6 -apple-system, BlinkMacSystemFont, "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
+h1, h2, h3 { margin: 0; font-weight: 600; }
+a { color: var(--brand); text-decoration: none; }
+
+/* --- 布局 --- */
+.page { max-width: 1120px; margin: 0 auto; padding: 24px 16px 64px; }
+.page-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap; margin-bottom: 20px;
+}
+.page-head h2 { font-size: 20px; }
+.muted { color: var(--text-muted); }
+.small { font-size: 12px; }
+
+/* --- 卡片 --- */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px;
+}
+.card + .card { margin-top: 16px; }
+.card-title {
+  font-size: 15px; font-weight: 600; margin-bottom: 14px;
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.grid { display: grid; gap: 16px; }
+.grid-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+
+/* --- 表单 --- */
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.field label { font-size: 13px; color: var(--text-muted); }
+input, select, textarea {
+  font: inherit; color: var(--text); padding: 8px 10px;
+  border: 1px solid var(--border); border-radius: 8px;
+  background: #fff; width: 100%;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none; border-color: var(--brand);
+  box-shadow: 0 0 0 3px var(--brand-soft);
+}
+textarea { min-height: 88px; resize: vertical; }
+.form-row { display: grid; gap: 0 14px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+
+/* --- 按钮 --- */
+button {
+  font: inherit; cursor: pointer; padding: 8px 14px;
+  border-radius: 8px; border: 1px solid var(--border);
+  background: #fff; color: var(--text);
+}
+button:hover { border-color: #cbd5e1; }
+button.primary { background: var(--brand); border-color: var(--brand); color: #fff; }
+button.primary:hover { filter: brightness(1.08); }
+button.danger { color: var(--danger); border-color: #fecaca; background: var(--danger-soft); }
+button:disabled { opacity: .5; cursor: not-allowed; }
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* --- 表格 --- */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+th { color: var(--text-muted); font-weight: 500; background: #fafbfc; }
+tbody tr:hover { background: #fafbfc; }
+
+/* --- 徽标 --- */
+.tag {
+  display: inline-block; padding: 2px 8px; border-radius: 999px;
+  font-size: 12px; line-height: 18px; white-space: nowrap;
+}
+.tag-ok { background: var(--ok-soft); color: var(--ok); }
+.tag-warn { background: var(--warn-soft); color: var(--warn); }
+.tag-danger { background: var(--danger-soft); color: var(--danger); }
+.tag-muted { background: #f1f5f9; color: var(--text-muted); }
+.tag-brand { background: var(--brand-soft); color: var(--brand); }
+
+/* --- 统计块 --- */
+.stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); }
+.stat .label { font-size: 13px; color: var(--text-muted); }
+.stat .value { font-size: 26px; font-weight: 600; margin-top: 4px; }
+
+.empty { text-align: center; color: var(--text-muted); padding: 32px 12px; }
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 18px; flex-wrap: wrap; }
+.tabs button {
+  border: none; background: none; border-bottom: 2px solid transparent;
+  border-radius: 0; padding: 9px 14px; color: var(--text-muted);
+}
+.tabs button.active { color: var(--brand); border-bottom-color: var(--brand); font-weight: 500; }
