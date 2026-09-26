@@ -1,0 +1,25 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 只有已登录用户可读写健康档案数据。
+    //
+    // ⚠️ 这条规则不区分“哪个登录用户”——任何能登录的账号都能读写全部档案。
+    // 因此必须在 Firebase 控制台关闭自助注册（Authentication → Settings →
+    // User actions → 取消勾选 "Enable create (sign-up)"），账号由管理员手动创建。
+    // 否则任何人注册一个邮箱就能读到全部客户健康数据。
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    match /clients/{docId}   { allow read, write: if signedIn(); }
+    match /vitals/{docId}    { allow read, write: if signedIn(); }
+    match /glucose/{docId}   { allow read, write: if signedIn(); }
+    match /metrics/{docId}   { allow read, write: if signedIn(); }
+    match /solutions/{docId} { allow read, write: if signedIn(); }
+
+    // 其余一律拒绝
+    match /{document=**} { allow read, write: if false; }
+  }
+}

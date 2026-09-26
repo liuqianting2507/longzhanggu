@@ -40,25 +40,45 @@ npm run build    # 产物输出到 dist/
 | `metrics` | 管理过程指标（糖化血红蛋白、腰围等） |
 | `solutions` | 解决方案记录 |
 
-## 接入 Firebase（第二版）
+## 数据源与认证
 
-数据访问全部经由 `src/services/db.js` 这一层门面，适配器可整体替换，业务代码与组件无需改动：
+数据访问全部经由 `src/services/db.js` 门面，适配器动态加载，切换数据源不改业务代码：
 
 ```
 src/services/
-├── db.js                  # 门面，按 VITE_DATA_SOURCE 选择适配器
+├── db.js                  # 门面，按 VITE_DATA_SOURCE 懒加载适配器
+├── firebase.js            # Firebase 初始化（firestore / auth 实例）
+├── auth.js                # 认证服务，仅 firebase 数据源下启用
 ├── models.js              # 集合名、字段定义、参考区间
 └── adapters/
-    ├── local.js           # localStorage 实现（当前默认）
-    └── firebase.js        # Firestore 实现（占位，含启用步骤）
+    ├── local.js           # localStorage 实现
+    └── firebase.js        # Firestore 实现
 ```
 
-切换步骤：
+| `VITE_DATA_SOURCE` | 存储 | 登录 |
+| --- | --- | --- |
+| `local` | 浏览器 localStorage | 不需要，直接进入 |
+| `firebase` | Firestore | 需要邮箱密码登录 |
 
-1. `npm install firebase`
-2. 复制 `.env.example` 为 `.env.local`，填入 Firebase 控制台配置
-3. 把 `VITE_DATA_SOURCE` 改为 `firebase`
-4. 解开 `src/services/adapters/firebase.js` 中的注释
+用 `local` 时不会把 Firebase SDK 打进包。
+
+### Firebase 项目
+
+- 项目：`longzhanggu-d1d9e`
+- Firestore：`(default)`，位置 `nam5`（美国多区域）
+- 安全规则：`firestore.rules`，仅已登录用户可读写五个集合，其余一律拒绝
+
+部署规则：
+
+```bash
+firebase deploy --only firestore:rules
+```
+
+⚠️ **规则不区分登录用户身份** —— 任何能登录的账号都能读写全部档案。因此必须在
+Firebase 控制台关闭自助注册（Authentication → Settings → User actions →
+取消勾选 Enable create），账号由管理员手动创建。
+
+本地跑 Firebase 模式需要 `.env.local`（不入库），字段见 `.env.example`。
 
 ## 后续可做
 

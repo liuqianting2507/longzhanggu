@@ -119,7 +119,18 @@ export const useHealthStore = defineStore('health', () => {
     await remove(COLLECTIONS.CLIENTS, clientId)
   }
 
+  /** 退出登录时清空内存数据，避免下一个账号看到上一个账号的残留 */
+  function reset() {
+    clients.value = []
+    vitals.value = []
+    glucose.value = []
+    metrics.value = []
+    solutions.value = []
+    error.value = ''
+  }
+
   return {
+    reset,
     clients, vitals, glucose, metrics, solutions, loading, error,
     activeClients, checkedInToday, today,
     clientById, vitalsOf, glucoseOf, metricsOf, solutionsOf,

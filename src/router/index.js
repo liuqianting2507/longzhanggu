@@ -1,7 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/auth.js'
 
 const routes = [
   { path: '/', redirect: '/dashboard' },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/LoginView.vue'),
+    meta: { title: '登录', public: true },
+  },
   {
     path: '/dashboard',
     name: 'dashboard',
@@ -44,6 +51,18 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+})
+
+router.beforeEach((to) => {
+  const auth = useAuthStore()
+  // local 数据源不启用登录，signedIn 恒为 true
+  if (!to.meta.public && !auth.signedIn) {
+    return { path: '/login', query: to.fullPath === '/' ? {} : { redirect: to.fullPath } }
+  }
+  if (to.path === '/login' && auth.signedIn && auth.enabled) {
+    return { path: '/dashboard' }
+  }
+  return true
 })
 
 router.afterEach((to) => {
