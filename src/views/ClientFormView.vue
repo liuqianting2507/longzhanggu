@@ -139,7 +139,12 @@ async function save() {
           {{ saving ? '保存中…' : '保存' }}
         </button>
         <button type="button" @click="router.back()">取消</button>
+        <span v-if="!valid" class="muted small hint">姓名为必填项，填写后即可保存</span>
       </div>
     </form>
   </div>
 </template>
+
+<style scoped>
+.hint { align-self: center; }
+</style>
